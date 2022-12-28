@@ -9,20 +9,36 @@ import "fmt"
 // 2 + 8 = 10, i.e. :
 // 4 x (Fn-1) + (Fn-2)
 func main() {
-	fmt.Println(sumEvenFibonacci(35))
-	fmt.Println(sumEvenFibonacci(4_000_000))
+	fmt.Println("\n-----------------------------")
+	n := 35
+	fmt.Printf("Sum of all even Fibonacci numbers that do not exceed (%d): %d\n", n, sumEvenFibonacci(n)) // 44
+	fmt.Println("\n-----------------------------")
+	n = 4_000_000
+	fmt.Printf("Sum of all even Fibonacci numbers that do not exceed (%d): %d\n", n, sumEvenFibonacci(n)) // 4613732
 }
 
 func sumEvenFibonacci(n int) (sum int) {
 	sum = 10
-	fst := 2 // Fn-2
-	snd := 8 // Fn-1
-	for {
-		fNum := 4*snd + fst
-		if fNum >= n {
-			return
-		}
-		sum += fNum
-		fst, snd = snd, fNum
+	gen := makeEvenFibGen()
+
+	for sum < n {
+		sum += gen()
+	}
+	return sum
+}
+
+func makeEvenFibGen() func() int {
+	fn_2 := 2 // Fn-2
+	fn_1 := 8 // Fn-1
+	QtyNums := 2
+	fmt.Printf("Even n-th Fib num: Fn(1-st): \t%d\n", fn_2)
+	fmt.Printf("Even n-th Fib num: Fn(2-nd): \t%d\n", fn_1)
+	return func() int {
+		var fn int
+		fn = 4*fn_1 + fn_2
+		fn_2, fn_1 = fn_1, fn
+		QtyNums++
+		fmt.Printf("Even n-th Fib num: Fn(%d-th): \t%d\n", QtyNums, fn)
+		return fn_1
 	}
 }
