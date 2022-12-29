@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/big"
 )
 
 var (
@@ -26,18 +27,38 @@ func SieveOfEratosthenes(value int) {
 	}
 	for i := 2; i < value; i++ {
 		if f[i] == false {
-			counter++
-			isPrime[counter] = i
+			addPrimeToMap(i)
 		}
 	}
 }
 
+func addPrimeToMap(i int) {
+	counter++
+	isPrime[counter] = i
+}
+
 func main() {
-	var nThNum int
-	_, err := fmt.Scan(&nThNum)
+	var nthNum int
+	_, err := fmt.Scan(&nthNum)
 	if err != nil {
 		return
 	}
+	fmt.Println("Solution with Sieve Of Eratosthenes")
 	SieveOfEratosthenes(maxEdge)
-	fmt.Println(isPrime[nThNum])
+	fmt.Printf("The %dth prime number is: %d\n", nthNum, isPrime[nthNum])
+
+	// ProbablyPrime is 100% accurate for inputs less than 2⁶⁴.
+	// 18_446_744_073_709_551_616 - which is quite enough for our task.
+	fmt.Println("Solution with the Miller-Rabin test")
+	counter = 0
+	isPrime = make(map[int]int, int(math.Sqrt(float64(maxEdge))))
+	for i := 2; ; i++ {
+		if big.NewInt(int64(i)).ProbablyPrime(0) {
+			addPrimeToMap(i)
+		}
+		if counter == nthNum {
+			break
+		}
+	}
+	fmt.Printf("The %dth prime number is: %d\n", nthNum, isPrime[nthNum])
 }
