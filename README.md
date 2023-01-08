@@ -2,4 +2,4 @@
 
 ## Solutions in Go (Golang)
 
-![My Project Euler's progress](https://projecteuler.net/profile/PPichugin.png)
+![My Project Euler's progress](https://projecteuler.net/profile/PPichugin.png?)
